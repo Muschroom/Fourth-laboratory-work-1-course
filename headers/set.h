@@ -34,19 +34,19 @@ public:
     }
 
     int get_size() const {
-        return tree->size;
+        return tree->getSize();
     }
 
     bool empty() const {
         return tree->size == 0;
     }
 
-    void add(T val){
+    void add(const T&  val){
         tree->insert(val);
     }
     
-    bool find(T val){
-        return tree->find(val);
+    bool find(const T& val){
+        return tree->contains(val);
     }
 
     void remove(const T& val){
@@ -57,19 +57,19 @@ public:
         tree->print();
     }
 
-    Set<T>* map(std::function<T(T)> func){
+    Set<T>* map(std::function<T(const T&)> func){
         Set<T>* new_set = new Set<T>();
         new_set->tree = tree->map(func);
         return new_set;
     }
 
-    Set<T>* where(std::function<bool(T)> func){
+    Set<T>* where(std::function<bool(const T&)> func){
         Set<T>* new_set = new Set<T>();
         new_set->tree = tree->where(func);
         return new_set;
     }
 
-    T reduce(std::function<T(T, T)> func, const T& val){
+    T reduce(std::function<T(const T&, const T&)> func, const T& val){
         return tree->reduce(func, val);
     }
 
