@@ -1,0 +1,94 @@
+#include <iostream>
+#include "headers/tree.h"
+#include "TYPES.h"
+using namespace std;
+
+
+bool whereStudent(const Student& person){
+    return person.getMoney() > 1001;
+}
+
+Student mapStudent(const Student& person){
+    return  Student(person.getAge(), person.getId(), person.getMoney() + 100, person.getName());
+}
+void checkTree(){
+ //проверка работы с Student(Teacher) для дерева
+    int SIZE = 4;
+    Student *a = new Student(18, 1, 1000, "A");
+    Student *b = new Student(19, 2, 1200, "B");
+    Student *c = new Student(17, 3, 1100, "C");
+    Student *d = new Student(23, 4, 1001, "D");
+    Student *fic = new Student(1, 22, 1, "1");
+    Student *fictive;
+    Tree<Student> *tree = new Tree<Student>();
+
+    //операция insert
+    tree->insert(*a);
+    tree->insert(*b);
+    tree->insert(*c);
+    tree->insert(*d);
+
+
+    cout << tree->getSize() << "\n";
+    
+    //операция contains
+    if(!tree->contains(*fic)){
+        cout << "NOT FOUND!\n";
+    } 
+    if(tree->contains(*a)){
+        cout << "FOUND!\n";
+    }
+
+    //операция remove
+    tree->remove(*a);
+    if(!tree->contains(*a)){
+        if(tree->getSize() != SIZE){
+            cout <<"DELETED!\n";
+        }
+        else{
+            cout <<"NOT FOUND!\n";
+        }
+    }
+
+    //операция поиска поддерева по элементу + поиск на вхождение поддерева
+    Tree<Student> *subtree = new Tree<Student>();
+    subtree = tree->subtree(*c);
+    cout << subtree->getSize() << "\n";
+    if(tree->hassubtree(subtree)){
+        cout << "SUBTREE FOUND!\n";
+    }
+    else{
+        cout << "SUBTREE NOT FOUND!\n";
+    }
+   
+    // объединение деревьев
+    subtree->insert(*a); 
+    tree->merge(subtree);
+    cout << tree->getSize() << "\n";
+
+    // операция Where
+    Tree<Student> * whereTree = new Tree<Student>();
+    whereTree = tree->where(whereStudent);
+    cout << whereTree->getSize() << " - size of filtered tree\n";
+    delete whereTree;
+
+    //операция Map
+    Tree<Student> * mapTree = new Tree<Student>();
+    mapTree = tree->map(mapStudent);
+    if(!tree->hassubtree(mapTree)){
+        cout << "Tree has been mapped!\n";
+    }
+    else{
+        cout << "Tree is the same!\n";
+    }
+    delete mapTree;
+
+    delete a, b, c, d, tree, subtree;
+}
+
+
+    
+
+int main() {
+   checkTree();
+}
