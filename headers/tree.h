@@ -163,14 +163,14 @@ private:
         size--;
     }
     
-    void Map(Node* now, Tree* tree, std::function<T(T)> func){
+    void Map(Node* now, Tree* tree, std::function<T(const T&)> func){
         if(!now){return;}
         Map(now->left, tree, func);
         tree->insert(func(now->value));
         Map(now->right, tree, func);
     }
 
-    void Where(Node* now, Tree* tree, std::function<bool(T)> func){
+    void Where(Node* now, Tree* tree, std::function<bool(const T&)> func){
         if(!now){return;}
         Where(now->left, tree, func);
         if(func(now->value)){
@@ -416,7 +416,7 @@ public:
         Print(root);
     }
 
-    void remove(const T& val){
+    void remove( const T& val){
         if (empty()) {
             throw std::logic_error("Empty tree");
         }
@@ -433,18 +433,13 @@ public:
         return Find(root, val) != nullptr;
     }
 
-    Node* find(T val){
-        return Find(root, val);
-    }
-
-
-    Tree* map(std::function<T(T)> func){
+    Tree* map(std::function<T( const T&)> func){
        Tree<T>* new_tree = new Tree<T>();
        Map(root, new_tree, func);
        return new_tree;
     }
 
-    Tree* where(std::function<bool(T)> func){
+    Tree* where(std::function<bool(const T&)> func){
        Tree<T>* new_tree = new Tree<T>();
        Where(root, new_tree, func);
        return new_tree;
